@@ -1,0 +1,209 @@
+/* ====================================================== */
+/* COMPOSANT : MODALES & OVERLAYS (APPROCHE MOBILE FIRST) */
+/* ====================================================== */
+
+/* Style partagé par tous les overlays qui prennent tout l'écran */
+.page-container,
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: var(--color-overlay);
+  backdrop-filter: blur(8px);
+
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.4s, visibility 0.4s;
+  padding: 1rem; /* On ajoute un padding global pour ne pas coller les bords */
+}
+
+/* Classe pour afficher un overlay */
+.page-container.is-visible,
+.modal-overlay:not(.is-hidden).is-visible {
+  /* MODIFIÉ: Ajout de .is-visible pour la modale de login */
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Style du contenu d'une page dans l'overlay principal (mobile) */
+.page-content {
+  background-color: var(--color-background);
+  color: var(--color-text-dark);
+  width: 100%; /* Prend toute la largeur disponible (avec le padding du parent) */
+  height: 100%; /* Prend toute la hauteur disponible */
+  max-width: 1400px;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+}
+
+/* Bouton de fermeture partagé (mobile) */
+.close-button {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 30;
+
+  background: none;
+  border: none;
+  color: var(--color-text-light);
+  font-size: 2rem;
+  font-weight: 300;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.close-button:hover {
+  transform: scale(1.2);
+}
+
+/* Conteneur pour formulaires (login, confirmation) */
+.login-container,
+.confirmation-container {
+  position: relative;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px; /* Limite la largeur sur mobile */
+}
+
+.login-container h3,
+.confirmation-container h3 {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.login-error-message {
+  color: #d32f2f;
+  min-height: 1.2em;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+#login-form .button-primary,
+#register-form .button-primary {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+/* Styles Modale de Confirmation */
+.confirmation-container {
+  max-width: 500px;
+  text-align: center;
+}
+
+.confirmation-icon {
+  font-size: 4rem;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+}
+
+.confirmation-container p {
+  margin-bottom: 1rem;
+}
+
+.confirmation-container p > strong {
+  font-weight: 600;
+}
+
+/* ====================================================== */
+/* COMPOSANT : MODALE DE FOCUS MÉDIA (MOBILE FIRST)       */
+/* ====================================================== */
+
+.media-focus-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #222;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column; /* Empilement vertical par défaut */
+  overflow: hidden;
+}
+
+.media-focus-close-btn {
+  z-index: 40;
+}
+
+.media-content {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.media-content img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.media-content.media-content__text-mode {
+  align-items: flex-start;
+  padding: 1.5rem;
+  color: #fff;
+  overflow-y: auto;
+}
+
+.media-content__text h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.media-controls {
+  flex-shrink: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap; /* Permet aux éléments de passer à la ligne */
+}
+
+.thumbnail-grid {
+  display: flex;
+  gap: 0.5rem;
+  height: 60px; /* Taille réduite pour mobile */
+}
+
+.thumbnail-grid img {
+  height: 100%;
+  width: auto;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.3s;
+}
+
+.thumbnail-grid img:hover,
+.thumbnail-grid img.selected-thumbnail {
+  border-color: var(--color-secondary);
+}
+
+.form-switch-link {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.form-switch-link a {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 600;
+}

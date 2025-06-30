@@ -1,0 +1,80 @@
+/* ====================================================== */
+/* LAYOUT : NAVIGATION (APPROCHE MOBILE FIRST - CORRIGÉ)  */
+/* ====================================================== */
+
+/* Styles du bouton burger (amélioré) */
+.nav-toggle {
+  display: block; /* Visible par défaut sur mobile */
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.1); /* Fond subtil pour la visibilité */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Bordure discrète */
+  color: var(--color-text-light);
+  font-size: 1.5rem; /* Taille d'icône ajustée */
+  cursor: pointer;
+  z-index: 1001;
+  width: 44px; /* Zone de clic plus grande (accessibilité) */
+  height: 44px; /* Zone de clic plus grande */
+  border-radius: 50%; /* Forme circulaire */
+  display: flex; /* Pour centrer l'icône à l'intérieur */
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s;
+}
+
+.nav-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Le panneau de navigation latéral est l'état par défaut */
+.main-nav {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 280px;
+  max-width: 80vw; /* S'assure de ne pas prendre tout l'écran */
+  height: 100vh;
+  padding-top: 5rem;
+  background-color: var(--color-text-dark);
+  border-left: 1px solid var(--color-secondary);
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+  transform: translateX(100%); /* Caché par défaut */
+  transition: transform 0.3s ease-in-out;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+/* La classe JS qui le rend visible */
+.main-nav.nav--visible {
+  transform: translateX(0);
+}
+
+/* Styles de la liste (Corrigé pour le centrage) */
+.main-nav ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch; /* Les éléments de liste prennent toute la largeur */
+  gap: 1.5rem;
+  padding: 0 1rem; /* Ajout d'un padding latéral */
+}
+
+/* Styles des liens (Corrigé pour le centrage) */
+.main-nav a {
+  text-decoration: none;
+  color: var(--color-text-light);
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  border-radius: 20px;
+  transition: background-color 0.3s, color 0.3s;
+  display: block; /* Nécessaire pour que text-align fonctionne */
+  text-align: center; /* Centre le texte à l'intérieur du lien */
+}
+
+.main-nav a:hover,
+.main-nav a.active {
+  color: var(--color-text-light);
+  background-color: var(--color-primary);
+}

@@ -1,0 +1,225 @@
+/* ====================================================== */
+/* COMPOSANT : VITRINE VIDÉO (APPROCHE MOBILE FIRST)      */
+/* ====================================================== */
+
+.video-showcase {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #000;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+/* ... (le reste des règles jusqu'à .play-pause-btn reste identique) ... */
+.video-showcase.is-playing:not(.show-controls) {
+  cursor: none;
+}
+
+.video-showcase__player {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-showcase__controls {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.3);
+  transition: opacity 0.4s;
+}
+
+.video-showcase:not(.is-playing) .video-showcase__controls,
+.video-showcase.is-playing.show-controls .video-showcase__controls {
+  opacity: 1;
+}
+
+.description-showcase:not(.is-hidden) ~ .video-showcase__controls {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Bouton Play/Pause (taille mobile) */
+.play-pause-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid #fff;
+  border-radius: 50%;
+  width: 60px; /* Taille réduite */
+  height: 60px; /* Taille réduite */
+  cursor: pointer;
+  color: #fff;
+  font-size: 1.5rem; /* Taille d'icône réduite */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(3px);
+  transition: transform 0.2s;
+}
+
+.play-pause-btn:hover {
+  transform: scale(1.1);
+}
+
+/* Description (mobile) */
+.description-showcase {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  color: var(--color-text-light);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem; /* Padding réduit */
+  transition: opacity 0.5s;
+}
+
+.description-showcase.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.description-showcase__text-content {
+  flex-shrink: 0;
+}
+
+.description-showcase__title {
+  font-size: 1.4rem; /* Police légèrement réduite */
+  font-weight: 700;
+}
+
+.description-showcase__description {
+  font-size: 0.85rem; /* Police légèrement réduite */
+  max-width: 80ch;
+}
+
+.description-showcase__image-grid {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 0;
+  overflow: hidden;
+  position: relative; /* Contexte pour positionner l'icône */
+}
+
+/* NOUVEAU : Style de l'icône "cliquer pour zoomer" */
+.click-to-focus-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 3rem;
+  pointer-events: none; /* L'icône ne doit pas intercepter les clics */
+  transition: opacity 0.3s, transform 0.3s;
+  opacity: 0; /* Cachée par défaut */
+}
+
+/* L'icône apparaît au survol de la zone cliquable */
+.description-showcase__image-grid:hover .click-to-focus-icon {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* On s'assure que l'icône est aussi visible quand le panneau est affiché */
+.description-showcase:not(.is-hidden) .click-to-focus-icon {
+  opacity: 1;
+}
+
+.description-showcase__image-grid img {
+  display: block;
+  max-height: 100%;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  border-radius: 5px;
+  border: 2px solid #fff;
+  flex-shrink: 1;
+  min-width: 0;
+  transition: filter 0.3s; /* On ajoute une transition pour le flou */
+}
+
+/* L'image devient floue au survol pour faire ressortir l'icône */
+.description-showcase__image-grid:hover img {
+  filter: blur(2px) brightness(0.8);
+}
+
+/* Footer de la description (mobile) */
+.description-showcase__footer {
+  display: flex;
+  flex-direction: column; /* Empilement vertical */
+  align-items: stretch; /* Les boutons prennent toute la largeur */
+  gap: 0.75rem; /* Espace réduit */
+}
+
+/* ... (Le reste du fichier reste identique) ... */
+.video-extra-controls {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  display: flex;
+  gap: 1rem;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+}
+
+.control-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.control-btn:hover {
+  transform: scale(1.1);
+  color: var(--color-secondary);
+}
+
+.control-btn span {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.button-secondary {
+  background-color: transparent;
+  color: var(--color-text-light);
+  border: 2px solid var(--color-secondary);
+  border-radius: 25px;
+  padding: 0.75rem 1.5rem;
+  font-family: var(--font-main);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.button-secondary:hover {
+  background-color: var(--color-secondary);
+  color: var(--color-text-dark);
+}
+
+.clickable-content {
+  cursor: pointer;
+}

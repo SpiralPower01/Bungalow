@@ -1,0 +1,134 @@
+/* ====================================================== */
+/* COMPOSANT : CALENDRIER (APPROCHE MOBILE FIRST)         */
+/* ====================================================== */
+
+/* Conteneur principal du calendrier (styles mobiles par défaut) */
+#doubleCalendar {
+  position: absolute;
+  z-index: 20;
+  background: rgba(244, 244, 244, 0.95);
+  backdrop-filter: blur(5px);
+  border-radius: 15px;
+  padding: 1rem;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+
+  /* Positionnement et taille pour mobile */
+  width: 90%;
+  max-width: 370px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  /* Gestion de la visibilité */
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+#doubleCalendar.is-visible {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* On cache le deuxième mois par défaut (pour mobile) */
+.calendar-instance:nth-child(2) {
+  display: none;
+}
+
+/* --- Styles du contenu interne du calendrier --- */
+
+.calendar-main-controls {
+  position: absolute;
+  top: 1.5rem;
+  left: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1rem;
+  pointer-events: none;
+}
+
+.calendar-main-controls button {
+  pointer-events: all;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: var(--color-text-dark);
+  cursor: pointer;
+}
+
+.calendar-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.calendar-instance {
+  display: flex;
+  flex-direction: column;
+}
+
+.calendar-instance__title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-transform: capitalize;
+  text-align: center;
+  margin-bottom: 1rem;
+  padding-top: 0.5rem;
+  color: #3e5355;
+}
+
+/* On force le contenu à prendre 100% de la largeur pour bien le centrer */
+.calendar-instance__title,
+.calendar-header,
+.calendar-grid {
+  width: 100%;
+}
+
+/* La grille est flexible par défaut */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.25rem;
+}
+
+.calendar-header > div {
+  font-weight: 600;
+  text-align: center;
+  font-size: 0.9rem;
+  padding-bottom: 0.5rem;
+  color: #3e5355;
+}
+
+/* Les cellules s'adaptent à la grille */
+.date-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 38px;
+  width: auto;
+  text-align: center;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  color: #3e5355;
+}
+
+/* ====================================================== */
+/* STYLES POUR LES ÉTATS SPÉCIFIQUES DES DATES            */
+/* (Correction de la régression)                          */
+/* ====================================================== */
+
+/* Style pour les jours non disponibles (passés ou réservés) */
+.date-cell.inactive {
+  color: #b0b0b0; /* Un gris plus lisible */
+  pointer-events: none; /* La date n'est pas cliquable */
+  text-decoration: line-through; /* On barre la date pour plus de clarté */
+}
+
+/* Style pour la date d'aujourd'hui */
+.date-cell.today {
+  font-weight: 700;
+  /* On utilise un "box-shadow" intérieur au lieu d'une bordure.
+     Ceci crée un cercle sans affecter la taille de l'élément,
+     évitant ainsi tout décalage de la mise en page. */
+  box-shadow: 0 0 0 2px var(--color-primary) inset;
+}
