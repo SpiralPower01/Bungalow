@@ -1,69 +1,87 @@
 /* ====================================================== */
-/* COMPOSANT : CALENDRIER (APPROCHE MOBILE FIRST)         */
+/* COMPOSANT : CALENDRIER DE RÉSERVATION                  */
 /* ====================================================== */
 
-/* Conteneur principal du calendrier (styles mobiles par défaut) */
-#doubleCalendar {
-  position: absolute;
-  z-index: 20;
-  background: rgba(244, 244, 244, 0.95);
-  backdrop-filter: blur(5px);
-  border-radius: 15px;
-  padding: 1rem;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-
-  /* Positionnement et taille pour mobile */
-  width: 90%;
-  max-width: 370px;
-  left: 50%;
-  transform: translateX(-50%);
-
-  /* Gestion de la visibilité */
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.3s;
+/* --- 1. Pied de page de la modale (si utilisé dans une modale) --- */
+.modal-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #ddd;
+  background-color: #f9f9f9;
 }
 
-#doubleCalendar.is-visible {
-  visibility: visible;
-  opacity: 1;
+.booking-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-/* On cache le deuxième mois par défaut (pour mobile) */
-.calendar-instance:nth-child(2) {
-  display: none;
+.booking-details__group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
-/* --- Styles du contenu interne du calendrier --- */
+.booking-details__group label {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.booking-details__group select {
+  padding: 0.25rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.price-summary {
+  text-align: right;
+}
+
+#price-summary-total {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+#confirm-booking-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* --- 2. Structure générale du calendrier --- */
+.calendar-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  position: relative;
+}
+
+#calendar-instance-2 {
+  display: none; /* Le 2ème mois est caché par défaut sur mobile */
+}
 
 .calendar-main-controls {
   position: absolute;
-  top: 1.5rem;
-  left: 0.5rem;
-  right: 0.5rem;
+  top: 0;
+  left: 0;
+  right: 0;
   display: flex;
   justify-content: space-between;
-  padding: 0 1rem;
-  pointer-events: none;
+  padding: 0 0.5rem;
+  z-index: 10;
 }
 
 .calendar-main-controls button {
-  pointer-events: all;
   background: none;
   border: none;
   font-size: 1.2rem;
   color: var(--color-text-dark);
   cursor: pointer;
-}
-
-.calendar-wrapper {
-  display: flex;
-  justify-content: center;
-}
-
-.calendar-instance {
-  display: flex;
-  flex-direction: column;
 }
 
 .calendar-instance__title {
@@ -72,18 +90,9 @@
   text-transform: capitalize;
   text-align: center;
   margin-bottom: 1rem;
-  padding-top: 0.5rem;
   color: #3e5355;
 }
 
-/* On force le contenu à prendre 100% de la largeur pour bien le centrer */
-.calendar-instance__title,
-.calendar-header,
-.calendar-grid {
-  width: 100%;
-}
-
-/* La grille est flexible par défaut */
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -95,40 +104,83 @@
   text-align: center;
   font-size: 0.9rem;
   padding-bottom: 0.5rem;
-  color: #3e5355;
 }
 
-/* Les cellules s'adaptent à la grille */
 .date-cell {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 38px;
-  width: auto;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   text-align: center;
   border-radius: 50%;
   cursor: pointer;
   transition: background-color 0.2s, color 0.2s;
-  color: #3e5355;
 }
 
-/* ====================================================== */
-/* STYLES POUR LES ÉTATS SPÉCIFIQUES DES DATES            */
-/* (Correction de la régression)                          */
-/* ====================================================== */
-
-/* Style pour les jours non disponibles (passés ou réservés) */
+/* --- 3. États des dates --- */
 .date-cell.inactive {
-  color: #b0b0b0; /* Un gris plus lisible */
-  pointer-events: none; /* La date n'est pas cliquable */
-  text-decoration: line-through; /* On barre la date pour plus de clarté */
+  color: #b0b0b0;
+  pointer-events: none;
+  text-decoration: line-through;
 }
 
-/* Style pour la date d'aujourd'hui */
 .date-cell.today {
   font-weight: 700;
-  /* On utilise un "box-shadow" intérieur au lieu d'une bordure.
-     Ceci crée un cercle sans affecter la taille de l'élément,
-     évitant ainsi tout décalage de la mise en page. */
   box-shadow: 0 0 0 2px var(--color-primary) inset;
+}
+
+/* --- 4. Thème de la sélection (AVEC CORRECTION DES ARRONDIS) --- */
+.date-cell.selected,
+.date-cell.in-range {
+  position: relative;
+  background: transparent !important;
+  color: var(--color-text-light);
+  overflow: visible;
+}
+
+.date-cell.selected::before,
+.date-cell.in-range::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  height: 100%;
+  width: calc(100% + 0.25rem);
+  background-image: linear-gradient(
+    to right,
+    var(--grad-start-color, var(--color-primary)),
+    var(--grad-end-color, var(--color-secondary))
+  );
+}
+
+/* CORRECTION : On restaure les coins arrondis pour le début et la fin de la période */
+.date-cell.range-start::before {
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+}
+
+.date-cell.range-end::before {
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  width: 100%; /* La dernière barre ne doit pas déborder */
+}
+
+/* --- 5. Styles pour écrans plus larges --- */
+@media screen and (min-width: 768px) {
+  .modal-footer {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .booking-details {
+    gap: 2rem;
+  }
+  .calendar-wrapper {
+    grid-template-columns: 1fr 1fr;
+  }
+  #calendar-instance-2 {
+    display: block;
+  }
 }

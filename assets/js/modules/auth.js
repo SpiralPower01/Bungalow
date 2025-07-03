@@ -1,75 +1,51 @@
+// Fichier : assets/js/modules/auth.js
 "use strict";
 
-import { DOM } from "../dom-loader.js";
+/**
+ * ======================================================
+ * MODULE : GESTION DE L'AUTHENTIFICATION (SIMULÉE)
+ * ======================================================
+ * Ce module gère l'état de connexion de l'utilisateur.
+ * Il utilise sessionStorage pour conserver l'état de connexion
+ * tant que l'onglet du navigateur est ouvert.
+ */
 
-let isLoggedIn = false;
+// Identifiants de connexion pour la simulation
+const VALID_USERNAME = "Bungalow971";
+const VALID_PASSWORD = "Password2025!";
 
-function handleLoginSuccess(userData) {
-  isLoggedIn = true;
-  DOM.loginModal.classList.remove("is-visible");
-  DOM.loginLogoutBtn.textContent = "Se déconnecter";
-  DOM.protectedContent.forEach((el) => {
-    if (el.tagName === "LI") el.style.display = "list-item";
-  });
-  alert(`Bienvenue ${userData.name || userData.email} !`);
+/**
+ * Tente de connecter un utilisateur avec les identifiants fournis.
+ * @param {string} username - Le nom d'utilisateur entré.
+ * @param {string} password - Le mot de passe entré.
+ * @returns {boolean} Vrai si la connexion a réussi, sinon faux.
+ */
+export function login(username, password) {
+  if (username === VALID_USERNAME && password === VALID_PASSWORD) {
+    // Si les identifiants sont corrects, on enregistre un "drapeau"
+    // dans le stockage de la session du navigateur.
+    sessionStorage.setItem("isUserLoggedIn", "true");
+    console.log("Authentification réussie.");
+    return true;
+  }
+  console.log("Échec de l'authentification.");
+  return false;
 }
 
-function handleLogout() {
-  isLoggedIn = false;
-  DOM.loginLogoutBtn.textContent = "Se connecter";
-  DOM.protectedContent.forEach((el) => {
-    if (el.tagName === "LI") el.style.display = "none";
-  });
-  alert("Vous avez été déconnecté.");
+/**
+ * Déconnecte l'utilisateur en supprimant le drapeau de session.
+ */
+export function logout() {
+  sessionStorage.removeItem("isUserLoggedIn");
+  console.log("Utilisateur déconnecté.");
 }
 
-export function initAuth() {
-  if (!DOM.loginLogoutBtn || !DOM.loginModal) return;
-
-  // Clic sur le bouton principal "Se connecter / Se déconnecter"
-  DOM.loginLogoutBtn.addEventListener("click", () => {
-    if (isLoggedIn) {
-      handleLogout();
-    } else {
-      DOM.loginModal.classList.add("is-visible");
-    }
-  });
-
-  // Clic pour fermer la modale de connexion
-  DOM.loginModal
-    .querySelector(".modal-close-btn")
-    .addEventListener("click", () =>
-      DOM.loginModal.classList.remove("is-visible")
-    );
-  DOM.loginModal.addEventListener("click", (event) => {
-    if (event.target === DOM.loginModal)
-      DOM.loginModal.classList.remove("is-visible");
-  });
-
-  // Soumission du formulaire de CONNEXION
-  DOM.loginForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    DOM.loginErrorMsg.textContent = "";
-    const email = DOM.loginForm.querySelector("#username").value;
-    const password = DOM.loginForm.querySelector("#password").value;
-
-    try {
-      const response = await fetch("http://localhost:3000/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Erreur de connexion");
-      }
-
-      handleLoginSuccess(data);
-      DOM.loginForm.reset();
-    } catch (error) {
-      DOM.loginErrorMsg.textContent = error.message;
-    }
-  });
+/**
+ * Vérifie si l'utilisateur est actuellement connecté.
+ * @returns {boolean} Vrai si l'utilisateur est connecté, sinon faux.
+ */
+export function isLoggedIn() {
+  // On vérifie simplement la présence et la valeur de notre drapeau.
+  const loggedIn = sessionStorage.getItem("isUserLoggedIn");
+  return loggedIn === "true";
 }

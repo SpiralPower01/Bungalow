@@ -1,56 +1,78 @@
 "use strict";
 
-// ======================================================
-// FICHIER D'ENTRÉE PRINCIPAL (CHEF D'ORCHESTRE)
-// ======================================================
-
-// Importation des initialiseurs de chaque module
-import { initBackgroundVideo } from "./modules/background-video.js";
-import { initOverlay } from "./modules/overlay.js";
-import { initAuth } from "./modules/auth.js";
-import { initTour } from "./modules/tour.js";
-import { initCalendar } from "./modules/calendar.js";
-import { initBooking } from "./modules/booking.js";
-import { initMobileNav } from "./modules/mobile-nav.js";
+// Imports des modules nécessaires pour la page d'accueil
+import { initScrollAnimations } from "./modules/animations.js";
+// CORRECTION : L'import du module d'équipement est supprimé car il n'est plus utilisé ici.
 
 /**
- * Affiche un message de confirmation ou d'annulation après une redirection de paiement.
+ * Gère la transition de sortie lors du clic sur un lien.
+ * @param {string} linkId - L'ID de l'élément <a> à cibler.
+ * @param {HTMLElement} body - L'élément body de la page.
  */
-function handlePaymentRedirect() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const paymentStatus = urlParams.get("payment_status");
-
-  if (paymentStatus === "success") {
-    alert(
-      "Paiement réussi ! Votre réservation est confirmée. Vous allez recevoir un e-mail de confirmation."
-    );
-  }
-
-  if (paymentStatus === "canceled") {
-    alert(
-      "Le paiement a été annulé. Votre réservation n'a pas été finalisée. Vous pouvez essayer à nouveau."
-    );
-  }
-
-  // Nettoie l'URL pour que le message n'apparaisse pas si l'utilisateur recharge la page
-  if (paymentStatus) {
-    history.replaceState(null, "", window.location.pathname);
+function setupPageExit(linkId, body) {
+  const link = document.getElementById(linkId);
+  if (link) {
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      const destination = event.currentTarget.href;
+      body.classList.add("is-exiting");
+      setTimeout(() => {
+        window.location.href = destination;
+      }, 400);
+    });
   }
 }
 
-// Attend que le DOM soit chargé
+// --- ÉCOUTEUR D'ÉVÉNEMENTS PRINCIPAL ---
 document.addEventListener("DOMContentLoaded", () => {
-  // Lance chaque module
-  initMobileNav(); // <-- AJOUTEZ CETTE LIGNE
-  initOverlay();
-  initAuth();
-  initTour();
-  initCalendar();
-  initBooking();
-  initBackgroundVideo();
+  const body = document.body;
 
-  // Gère les redirections de paiement
-  handlePaymentRedirect();
+  // --- GESTION DES TRANSITIONS DE PAGE ---
+  body.classList.remove("is-entering");
+  setupPageExit("link-to-experience", body);
 
-  console.log("Application modulaire initialisée avec succès.");
+  // CORRECTION : Toute la logique de la modale équipement a été supprimée.
+
+  // --- GESTION DU FORMULAIRE DE CONTACT (FORMSPREE) ---
+  const contactForm = document.querySelector("#contact-form");
+  const formStatus = document.querySelector("#contact-form-status");
+
+  if (contactForm) {
+    contactForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const data = new FormData(e.target);
+      try {
+        const response = await fetch(e.target.action, {
+          method: "POST",
+          body: data,
+          headers: {
+            Accept: "application/json",
+          },
+        });
+
+        if (response.ok) {
+          formStatus.textContent = "Merci ! Votre message a bien été envoyé.";
+          formStatus.style.color = "var(--color-primary)";
+          contactForm.reset();
+        } else {
+          const errorData = await response.json();
+          const errorMessage = errorData.errors
+            .map((error) => error.message)
+            .join(", ");
+          throw new Error(errorMessage);
+        }
+      } catch (error) {
+        formStatus.textContent =
+          "Oups ! Une erreur est survenue. Veuillez réessayer.";
+        formStatus.style.color = "red";
+        console.error("Erreur d'envoi Formspree:", error);
+      }
+    });
+  }
+
+  // --- INITIALISATIONS DES MODULES ---
+  initScrollAnimations();
+  // CORRECTION : L'initialisation du module équipement est supprimée.
+
+  console.log("Application (index.html) allégée et initialisée.");
 });
