@@ -1,0 +1,186 @@
+/* ====================================================== */
+/* COMPOSANT : CALENDRIER DE RÉSERVATION                  */
+/* ====================================================== */
+
+/* --- 1. Pied de page de la modale (si utilisé dans une modale) --- */
+.modal-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #ddd;
+  background-color: #f9f9f9;
+}
+
+.booking-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.booking-details__group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.booking-details__group label {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.booking-details__group select {
+  padding: 0.25rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.price-summary {
+  text-align: right;
+}
+
+#price-summary-total {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+#confirm-booking-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* --- 2. Structure générale du calendrier --- */
+.calendar-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  position: relative;
+}
+
+#calendar-instance-2 {
+  display: none; /* Le 2ème mois est caché par défaut sur mobile */
+}
+
+.calendar-main-controls {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0.5rem;
+  z-index: 10;
+}
+
+.calendar-main-controls button {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: var(--color-text-dark);
+  cursor: pointer;
+}
+
+.calendar-instance__title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-transform: capitalize;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #3e5355;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.25rem;
+}
+
+.calendar-header > div {
+  font-weight: 600;
+  text-align: center;
+  font-size: 0.9rem;
+  padding-bottom: 0.5rem;
+}
+
+.date-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  text-align: center;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* --- 3. États des dates --- */
+.date-cell.inactive {
+  color: #b0b0b0;
+  pointer-events: none;
+  text-decoration: line-through;
+}
+
+.date-cell.today {
+  font-weight: 700;
+  box-shadow: 0 0 0 2px var(--color-primary) inset;
+}
+
+/* --- 4. Thème de la sélection (AVEC CORRECTION DES ARRONDIS) --- */
+.date-cell.selected,
+.date-cell.in-range {
+  position: relative;
+  background: transparent !important;
+  color: var(--color-text-light);
+  overflow: visible;
+}
+
+.date-cell.selected::before,
+.date-cell.in-range::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  height: 100%;
+  width: calc(100% + 0.25rem);
+  background-image: linear-gradient(
+    to right,
+    var(--grad-start-color, var(--color-primary)),
+    var(--grad-end-color, var(--color-secondary))
+  );
+}
+
+/* CORRECTION : On restaure les coins arrondis pour le début et la fin de la période */
+.date-cell.range-start::before {
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+}
+
+.date-cell.range-end::before {
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  width: 100%; /* La dernière barre ne doit pas déborder */
+}
+
+/* --- 5. Styles pour écrans plus larges --- */
+@media screen and (min-width: 768px) {
+  .modal-footer {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .booking-details {
+    gap: 2rem;
+  }
+  .calendar-wrapper {
+    grid-template-columns: 1fr 1fr;
+  }
+  #calendar-instance-2 {
+    display: block;
+  }
+}

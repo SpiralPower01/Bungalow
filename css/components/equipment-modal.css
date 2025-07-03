@@ -1,0 +1,97 @@
+/* ====================================================== */
+/* COMPOSANT : MODALE DES ÉQUIPEMENTS (ACCORDÉON)         */
+/* ====================================================== */
+
+/* --- Conteneur principal de l'accordéon --- */
+.accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* --- Style de chaque item de l'accordéon --- */
+.accordion-item {
+  background-color: #f7f7f7;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+}
+
+/* --- Style des en-têtes/boutons de l'accordéon --- */
+.accordion-header {
+  background-color: #f0f0f0;
+  color: var(--color-text-dark);
+  cursor: pointer;
+  padding: 1rem 1.5rem;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: background-color 0.3s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.accordion-header:hover {
+  background-color: #e0e0e0;
+}
+
+/* --- Style de l'icône chevron --- */
+.accordion-header i {
+  color: var(--color-primary);
+  transition: transform 0.4s ease;
+}
+
+/* --- Contenu de l'accordéon (la liste) --- */
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease-out;
+  background-color: #ffffff;
+}
+
+.accordion-content ul,
+.accordion-content div {
+  /* Cible le <ul> ou le <div> contenant le texte */
+  list-style: none;
+  padding: 1rem 1.5rem;
+  margin: 0;
+}
+
+/* Style de base pour les paragraphes et items de liste */
+.accordion-content p,
+.accordion-content li {
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+  line-height: 1.6; /* Améliore la lisibilité */
+}
+
+/* ** LA CORRECTION EST ICI ** */
+/* On applique le 'display: flex' UNIQUEMENT aux items qui ont une icône */
+.accordion-content li:has(i) {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.accordion-content li:last-child {
+  margin-bottom: 0;
+}
+
+.accordion-content li i {
+  color: var(--color-primary);
+  width: 20px; /* Assure un alignement parfait */
+  text-align: center;
+}
+
+/* --- État ouvert de l'accordéon --- */
+.accordion-item.is-open .accordion-header i {
+  transform: rotate(180deg);
+}
+
+.accordion-item.is-open .accordion-content {
+  border-top: 1px solid #e0e0e0;
+}

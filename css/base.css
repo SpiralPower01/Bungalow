@@ -1,0 +1,121 @@
+/* ====================================================== */
+/* RESET CSS ET STYLES DE BASE                            */
+/* ====================================================== */
+
+/* 1. "Reset" de base.
+    Supprime les marges par défaut et assure un calcul 
+    des tailles plus intuitif (box-sizing).
+*/
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 2. Styles globaux pour une page plus fluide et responsive. */
+html {
+  /* Permet un défilement fluide lorsqu'on clique sur des ancres (ex: flèche "scroll down") */
+  scroll-behavior: smooth;
+}
+
+body {
+  /* On utilise les variables définies dans variables.css */
+  font-family: var(--font-main);
+  background-color: var(--color-background);
+  color: var(--color-text-dark);
+  line-height: 1.6; /* Un interlignage confortable pour la lecture */
+}
+
+/* 3. Styles de base pour les éléments communs. */
+img {
+  /* Rend les images responsive par défaut */
+  max-width: 100%;
+  height: auto;
+  display: block; /* Supprime l'espace parfois ajouté sous les images */
+}
+
+a {
+  /* Style de base pour les liens */
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3 {
+  /* Un espacement de base sous les titres */
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+p {
+  /* Un espacement de base sous les paragraphes */
+  margin-bottom: 1rem;
+}
+
+/* 4. Classe utilitaire pour centrer le contenu.
+    Nous l'avons utilisée dans notre HTML sur les sections.
+*/
+.container {
+  width: 90%; /* Le contenu prend 90% de la largeur de l'écran */
+  max-width: 1200px; /* Mais jamais plus de 1200px sur les grands écrans */
+  margin: 0 auto; /* Centre le conteneur horizontalement */
+}
+
+.page-section {
+  padding: 4rem 0; /* Ajoute un espacement vertical confortable entre les sections */
+}
+
+.button-primary {
+  display: inline-block;
+  background-color: var(--color-secondary);
+  color: var(--color-text-dark);
+  border: none;
+  border-radius: 50px; /* Pour un effet "pilule" moderne */
+  padding: 0.75rem 2rem;
+  font-family: var(--font-main);
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.button-primary:hover {
+  background-color: #ffc107; /* Jaune un peu plus clair au survol */
+  transform: translateY(-3px); /* Effet de soulèvement plus prononcé */
+}
+
+/* Style pour les boutons secondaires (fond transparent, bordure colorée) */
+.button-secondary {
+  display: inline-flex; /* Pour bien aligner l'icône et le texte */
+  align-items: center;
+  gap: 0.75rem; /* Espace entre l'icône et le texte */
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-secondary); /* Bordure avec la couleur secondaire */
+  border-radius: 50px;
+  padding: 0.6rem 1.8rem;
+  font-family: var(--font-main);
+  font-size: 0.9rem; /* Légèrement plus petit que le bouton primaire */
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.button-secondary:hover {
+  background-color: var(
+    --color-secondary
+  ); /* Le fond devient jaune au survol */
+  color: var(
+    --color-text-dark
+  ); /* Le texte devient sombre pour la lisibilité */
+  transform: translateY(-3px);
+}

@@ -1,0 +1,32 @@
+/* ====================================================== */
+/* FICHIER CSS PRINCIPAL - IMPORTE TOUS LES MODULES       */
+/* ====================================================== */
+/* Ce fichier ne contient aucun style. Il sert uniquement
+   à importer les modules CSS dans le bon ordre pour que
+   le navigateur les lise correctement.
+*/
+
+/* 1. Variables globales (doit TOUJOURS être en premier) */
+@import url("variables.css");
+
+/* 2. Reset et styles de base */
+@import url("base.css");
+@import url("components/transitions.css");
+
+/* 3. Styles de la mise en page principale */
+@import url("layout.css");
+
+/* 4. Styles des composants réutilisables */
+@import url("components/hero.css");
+@import url("components/showcase.css");
+@import url("components/guide.css");
+@import url("components/booking.css");
+@import url("components/modal.css");
+@import url("components/calendar.css");
+@import url("components/contact-form.css");
+@import url("components/experience.css");
+@import url("components/tour.css");
+@import url("components/focus-overlay.css");
+@import url("components/equipment-modal.css");
+@import url("components/login-modal.css");
+@import url("components/profile-modal.css");

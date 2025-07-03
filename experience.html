@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mon Bungalow | Découvrez l'Expérience & Réservez</title>
+    <meta
+      name="description"
+      content="Explorez notre bungalow en détail, consultez les disponibilités sur notre calendrier interactif et réservez votre séjour de rêve en Guadeloupe."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="assets/css/main.css" />
+  </head>
+  <body class="is-transitioning is-entering">
+    <header class="experience-header">
+      <div class="container">
+        <a href="index.html" class="back-to-home-link"
+          ><i class="fas fa-arrow-left"></i> Retour à l'accueil</a
+        >
+        <div class="booking-controls">
+          <div class="booking-details">
+            <div class="booking-details__group">
+              <label for="occupants">Voyageurs</label>
+              <select name="occupants" id="occupants">
+                <option value="1">1 personne</option>
+                <option value="2" selected>2 personnes</option>
+                <option value="3">3 personnes</option>
+                <option value="4">4 personnes</option>
+              </select>
+            </div>
+          </div>
+          <div class="price-summary">
+            <span id="price-summary-nights">-- nuits</span>
+            <strong id="price-summary-total">-- €</strong>
+          </div>
+          <button id="confirm-booking-btn" class="button-primary" disabled>
+            Réserver ce séjour
+          </button>
+        </div>
+
+        <!-- Cette bannière s'affichera si l'utilisateur EST connecté -->
+        <div id="welcome-banner" class="welcome-banner">
+          <!-- Le contenu (nom, dates) sera injecté ici par le JS -->
+        </div>
+
+        <!-- NOUVEAU : Conteneur pour les boutons de connexion/déconnexion/profil -->
+        <div id="auth-controls-container" class="auth-controls">
+          <!-- Les boutons seront injectés ici par le JS -->
+        </div>
+      </div>
+    </header>
+
+    <main class="page-section">
+      <div class="container">
+        <div id="calendar-wrapper" class="calendar-wrapper">
+          <div class="calendar-main-controls">
+            <button id="prev-month-btn" aria-label="Mois précédent">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button id="next-month-btn" aria-label="Mois suivant">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+
+          <div id="calendar-instance-1" class="calendar-instance">
+            <h3 id="month-year-1" class="calendar-instance__title"></h3>
+            <div class="calendar-grid calendar-header">
+              <div>Lu</div>
+              <div>Ma</div>
+              <div>Me</div>
+              <div>Je</div>
+              <div>Ve</div>
+              <div>Sa</div>
+              <div>Di</div>
+            </div>
+            <div id="dates-grid-1" class="calendar-grid"></div>
+          </div>
+
+          <div id="calendar-instance-2" class="calendar-instance">
+            <h3 id="month-year-2" class="calendar-instance__title"></h3>
+            <div class="calendar-grid calendar-header">
+              <div>Lu</div>
+              <div>Ma</div>
+              <div>Me</div>
+              <div>Je</div>
+              <div>Ve</div>
+              <div>Sa</div>
+              <div>Di</div>
+            </div>
+            <div id="dates-grid-2" class="calendar-grid"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <section id="experience-hub" class="page-section">
+      <div class="container">
+        <h2 class="hub-title">Explorez votre séjour en détail</h2>
+        <div class="hub-grid">
+          <a href="#apercu" class="hub-button">
+            <i class="fas fa-film"></i>
+            <span>Visite Guidée Vidéo</span>
+          </a>
+          <a href="#equipements" class="hub-button">
+            <i class="fas fa-list-ul"></i>
+            <span>Liste des Équipements</span>
+          </a>
+          <a href="#fonctionnement" class="hub-button">
+            <i class="fas fa-info-circle"></i>
+            <span>Infos & Fonctionnement</span>
+          </a>
+
+          <!-- CONTENU PROTÉGÉ -->
+          <a
+            href="#offres-partenaires"
+            class="hub-button"
+            data-protected="true"
+          >
+            <i class="fas fa-star"></i>
+            <span>Offres Partenaires</span>
+          </a>
+          <a
+            href="#instructions-entree"
+            class="hub-button"
+            data-protected="true"
+          >
+            <i class="fas fa-door-open"></i>
+            <span>Instructions d'Entrée</span>
+          </a>
+          <a
+            href="#instructions-sortie"
+            class="hub-button"
+            data-protected="true"
+          >
+            <i class="fas fa-key"></i>
+            <span>Instructions de Départ</span>
+          </a>
+          <!-- FIN DU CONTENU PROTÉGÉ -->
+
+          <a href="#guide" class="hub-button">
+            <i class="fas fa-map-signs"></i>
+            <span>Guide des Bonnes Adresses</span>
+          </a>
+          <a href="#contact" class="hub-button">
+            <i class="fas fa-envelope"></i>
+            <span>Nous Contacter</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modale de la Visite Guidée -->
+    <div id="video-tour-modal" class="modal-overlay">
+      <div class="media-focus-container">
+        <button
+          class="global-overlay-close-btn"
+          aria-label="Fermer tous les overlays"
+        >
+          <i class="fas fa-power-off"></i>
+        </button>
+        <button id="tour-close-btn" class="modal-close-btn">&times;</button>
+
+        <div class="video-wrapper">
+          <video
+            id="opening-video"
+            class="video-tour-player"
+            src="assets/videos/OpeningVideo.mp4"
+            muted
+            playsinline
+          ></video>
+          <video
+            id="main-tour-video"
+            class="video-tour-player"
+            src="assets/videos/PresentationVideo.mp4"
+            loop
+            muted
+            playsinline
+          ></video>
+
+          <div class="video-progress-bar">
+            <div
+              id="video-progress-bar-fill"
+              class="video-progress-bar__fill"
+            ></div>
+          </div>
+        </div>
+
+        <div id="tour-description-panel" class="description-showcase is-hidden">
+          <div
+            id="tour-scene-indicator"
+            class="description-showcase__indicator"
+          ></div>
+
+          <div class="description-showcase__content">
+            <h3 id="tour-scene-title" class="description-showcase__title"></h3>
+            <p
+              id="tour-scene-description"
+              class="description-showcase__description"
+            ></p>
+            <button id="open-focus-gallery-btn" class="button-secondary">
+              <i class="fas fa-camera"></i> Voir les photos
+            </button>
+          </div>
+
+          <div class="description-showcase__nav">
+            <button id="tour-prev-scene-btn" class="button-secondary">
+              <i class="fas fa-arrow-left"></i> Précédent
+            </button>
+            <button id="tour-next-scene-btn" class="button-secondary">
+              Suivant <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <div class="description-showcase__footer">
+            <button id="tour-continue-btn" class="button-primary">
+              Continuer la visite
+            </button>
+          </div>
+        </div>
+
+        <div class="media-controls">
+          <button id="tour-play-pause-btn" class="play-pause-btn">
+            <i class="fas fa-play"></i>
+          </button>
+          <div class="controls-divider"></div>
+          <button
+            id="tour-skip-btn"
+            class="control-btn"
+            aria-label="Afficher la description"
+          >
+            <i class="fas fa-fast-forward"></i><span>Passer</span>
+          </button>
+          <button
+            id="tour-speed-btn"
+            class="control-btn"
+            aria-label="Changer la vitesse"
+          >
+            <i class="fas fa-tachometer-alt"></i><span>x1</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modale des équipements -->
+    <div id="equipment-modal" class="modal-overlay">
+      <div class="modal-container">
+        <header class="modal-header">
+          <h3>Équipements du Bungalow</h3>
+          <button
+            id="close-equipment-modal-btn"
+            class="modal-close-btn"
+            aria-label="Fermer la fenêtre"
+          >
+            &times;
+          </button>
+        </header>
+        <div id="equipment-list-content" class="modal-content">
+          <p>Chargement de la liste...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modale de Focus Média -->
+    <div id="media-focus-modal" class="modal-overlay">
+      <div class="media-focus-container">
+        <button
+          class="global-overlay-close-btn"
+          aria-label="Fermer tous les overlays"
+        >
+          <i class="fas fa-power-off"></i>
+        </button>
+        <button id="media-focus-close-btn" class="modal-close-btn">
+          &times;
+        </button>
+        <div id="media-focus-content" class="media-content">
+          <!-- Le média (image ou texte) sera injecté ici par le JS -->
+        </div>
+        <div class="media-controls">
+          <button id="toggle-details-btn" class="control-btn">
+            <i class="fas fa-info-circle"></i> <span>Détails</span>
+          </button>
+          <div id="media-focus-thumbnails" class="thumbnail-grid">
+            <!-- Les miniatures seront injectées ici par le JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modale de Connexion -->
+    <div id="login-modal" class="modal-overlay">
+      <div class="modal-container">
+        <header class="modal-header">
+          <h3>Connexion à votre espace</h3>
+          <button
+            id="close-login-modal-btn"
+            class="modal-close-btn"
+            aria-label="Fermer la fenêtre"
+          >
+            &times;
+          </button>
+        </header>
+        <div class="modal-content" style="padding: 1.5rem 2rem">
+          <form id="login-form">
+            <div class="form-group">
+              <label for="username">Identifiant</label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                required
+                autocomplete="username"
+              />
+            </div>
+            <div class="form-group">
+              <label for="password">Mot de passe</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                required
+                autocomplete="current-password"
+              />
+            </div>
+            <p id="login-error-msg" class="login-error"></p>
+            <button type="submit" class="button-primary" style="width: 100%">
+              Se connecter
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOUVEAU : Modale de Contenu Générique -->
+    <div id="content-modal" class="modal-overlay">
+      <div class="modal-container">
+        <header class="modal-header">
+          <h3>Titre du Contenu</h3>
+          <button class="modal-close-btn" aria-label="Fermer la fenêtre">
+            &times;
+          </button>
+        </header>
+        <div class="modal-content" style="padding: 1rem 1.5rem">
+          <!-- Le contenu sera injecté ici par le JS -->
+        </div>
+      </div>
+    </div>
+
+    <script src="assets/js/experience.js" type="module" defer></script>
+
+    <!-- Modale du Profil Utilisateur -->
+    <div id="profile-modal" class="modal-overlay">
+      <div class="modal-container">
+        <header class="modal-header">
+          <h3>Votre Espace Personnel</h3>
+          <button
+            id="close-profile-modal-btn"
+            class="modal-close-btn"
+            aria-label="Fermer"
+          >
+            &times;
+          </button>
+        </header>
+        <div class="modal-content" style="padding: 1.5rem 2rem">
+          <form id="profile-form">
+            <div class="accordion">
+              <div class="accordion-item">
+                <button type="button" class="accordion-header">
+                  <span>Informations Personnelles</span>
+                  <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="accordion-content">
+                  <div class="profile-section">
+                    <div class="form-grid">
+                      <div class="form-group">
+                        <label for="profile-firstname">Prénom</label>
+                        <input
+                          type="text"
+                          id="profile-firstname"
+                          name="firstname"
+                        />
+                      </div>
+                      <div class="form-group">
+                        <label for="profile-lastname">Nom</label>
+                        <input
+                          type="text"
+                          id="profile-lastname"
+                          name="lastname"
+                        />
+                      </div>
+                      <div class="form-group">
+                        <label for="profile-email">Email</label>
+                        <input type="email" id="profile-email" name="email" />
+                      </div>
+                      <div class="form-group">
+                        <label for="profile-phone">Téléphone</label>
+                        <input type="tel" id="profile-phone" name="phone" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <button type="button" class="accordion-header">
+                  <span>Détails de votre séjour</span>
+                  <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="accordion-content">
+                  <div class="profile-section">
+                    <div class="form-grid">
+                      <div class="form-group">
+                        <label for="profile-duration"
+                          >Durée de la location</label
+                        >
+                        <input
+                          type="text"
+                          id="profile-duration"
+                          name="duration"
+                          readonly
+                        />
+                      </div>
+                      <div class="form-group form-group-compound">
+                        <label for="profile-arrival-date"
+                          >Date d'arrivée (choisissez l'heure)</label
+                        >
+                        <div class="input-group">
+                          <input
+                            type="text"
+                            id="profile-arrival-date"
+                            name="arrival-date"
+                            readonly
+                          />
+                          <select id="profile-arrival-time" name="arrival-time">
+                            <option value="">--:--</option>
+                            <option value="15:00">15:00</option>
+                            <option value="16:00">16:00</option>
+                            <option value="17:00">17:00</option>
+                            <option value="18:00">18:00</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group form-group-compound">
+                        <label for="profile-departure-date"
+                          >Départ au plus tard le (choisissez l'heure)</label
+                        >
+                        <div class="input-group">
+                          <input
+                            type="text"
+                            id="profile-departure-date"
+                            name="departure-date"
+                            readonly
+                          />
+                          <select
+                            id="profile-departure-time"
+                            name="departure-time"
+                          >
+                            <option value="09:00">09:00</option>
+                            <option value="10:00">10:00</option>
+                            <option value="11:00" selected>11:00</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="profile-actions">
+              <button type="submit" class="button-primary">
+                Enregistrer les modifications
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOUVEAU : Pop-up de notification pour informations manquantes -->
+    <div id="info-notification-popup" class="info-popup">
+      <p>
+        Pensez à compléter les informations de votre profil pour faciliter votre
+        arrivée !
+      </p>
+      <button id="close-notification-popup-btn" class="popup-close-btn">
+        &times;
+      </button>
+    </div>
+  </body>
+</html>
