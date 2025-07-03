@@ -3,7 +3,7 @@
 
 /**
  * ======================================================
- * MODULE : CONTRÔLEUR DU PROFIL UTILISATEUR (v2 - Stable)
+ * MODULE : CONTRÔLEUR DU PROFIL UTILISATEUR (v3 - Avec notification simulée)
  * ======================================================
  * Gère la modale de profil, la sauvegarde des données,
  * les notifications et l'accordéon pour le responsive.
@@ -39,17 +39,17 @@ function loadUserData() {
     dom.form.elements["arrival-date"].value = `${day}/${month}/${year}`;
     dom.form.elements["arrival-time"].value = timePart || "";
   } else {
-    dom.form.elements["arrival-date"].value = "10/08/2025";
+    dom.form.elements["arrival-date"].value = "03/07/2025";
     dom.form.elements["arrival-time"].value = "";
   }
 
   if (data.departure) {
     const [datePart, timePart] = data.departure.split(" à ");
     dom.form.elements["departure-date"].value = datePart;
-    dom.form.elements["departure-time"].value = timePart || "11:00";
+    dom.form.elements["departure-time"].value = timePart || "10:00";
   } else {
-    dom.form.elements["departure-date"].value = "17/08/2025";
-    dom.form.elements["departure-time"].value = "11:00";
+    dom.form.elements["departure-date"].value = "04/07/2025";
+    dom.form.elements["departure-time"].value = "10:00";
   }
 
   dom.form.elements.duration.value = data.duration || "7 nuits";
@@ -80,9 +80,6 @@ function saveUserData(event) {
   delete data["departure-time"];
 
   localStorage.setItem(USER_DATA_KEY, JSON.stringify(data));
-
-  // AMÉLIORATION : On recharge la page pour voir les changements immédiatement.
-  // Un simple message de confirmation n'est plus nécessaire.
   window.location.reload();
 }
 
@@ -99,9 +96,19 @@ function hideModal() {
   dom.modal.classList.remove("is-visible");
 }
 
+/**
+ * Vérifie si des infos sont manquantes et déclenche les notifications (visuelle et simulée).
+ */
 function checkAndShowNotification() {
   const data = JSON.parse(localStorage.getItem(USER_DATA_KEY)) || {};
   if (!data.arrival) {
+    // Action simulée : Log dans la console [cite: 51]
+    console.log(
+      `%cSIMULATION : Envoi d'un email de rappel au client pour compléter son heure d'arrivée.`,
+      "color: #ff9800; font-weight: bold; font-size: 1.1em;"
+    );
+
+    // Action visuelle : Affichage du pop-up après un délai
     setTimeout(() => {
       if (dom.notificationPopup) {
         dom.notificationPopup.classList.add("is-visible");
@@ -159,7 +166,7 @@ export function initProfileController() {
   });
 
   setupProfileAccordion();
-  checkAndShowNotification();
+  checkAndShowNotification(); // Cette fonction contient maintenant les deux logiques
 
   console.log("Module Profile Controller initialisé.");
 }

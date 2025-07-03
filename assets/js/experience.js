@@ -20,6 +20,7 @@ import {
 } from "./modules/content-data.js";
 import { initProfileController } from "./modules/profile-controller.js";
 import { handleNotifications } from "./modules/notifications.js";
+import { initInventoryController } from "./modules/inventory-controller.js";
 
 /**
  * Gère la bannière de bienvenue pour les utilisateurs connectés.
@@ -115,6 +116,10 @@ document.addEventListener("DOMContentLoaded", () => {
   if (isLoggedIn()) {
     document.body.classList.add("user-is-logged-in");
     initWelcomeBanner(); // Affiche la bannière si connecté.
+
+    // On récupère les données pour les passer au module de notification
+    const userData = JSON.parse(localStorage.getItem("bungalowUserData")) || {}; // <= AJOUTEZ CETTE LIGNE
+    handleNotifications(userData); // <= AJOUTEZ CETTE LIGNE
   }
 
   // Gère l'animation d'entrée de la page.
@@ -129,6 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initContentModal();
   initHubInteractions();
   initProfileController();
+  initInventoryController();
 
   const galleryTriggerBtn = document.querySelector("#open-focus-gallery-btn");
   if (galleryTriggerBtn) {

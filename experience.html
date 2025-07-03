@@ -144,6 +144,15 @@
             <i class="fas fa-key"></i>
             <span>Instructions de Départ</span>
           </a>
+          <a
+            href="#etat-des-lieux"
+            class="hub-button"
+            id="hub-inventory-btn"
+            data-protected="true"
+          >
+            <i class="fas fa-clipboard-list"></i>
+            <span>État des Lieux</span>
+          </a>
           <!-- FIN DU CONTENU PROTÉGÉ -->
 
           <a href="#guide" class="hub-button">
@@ -492,6 +501,35 @@
       <button id="close-notification-popup-btn" class="popup-close-btn">
         &times;
       </button>
+    </div>
+
+    <div class="inventory-modal" id="inventory-modal" hidden>
+      <div class="inventory-modal-content">
+        <header class="inventory-modal-header">
+          <h2>État des Lieux d'Entrée</h2>
+          <p>Veuillez vérifier chaque élément et signaler toute anomalie.</p>
+          <button
+            class="global-overlay-close-btn"
+            id="close-inventory-modal-btn"
+            aria-label="Fermer l'état des lieux"
+          >
+            &times;
+          </button>
+        </header>
+
+        <main class="inventory-modal-body" id="inventory-list-container">
+          <div class="loading-spinner"></div>
+        </main>
+
+        <footer class="inventory-modal-footer">
+          <button class="btn btn-secondary" id="inventory-save-btn">
+            Sauvegarder et Fermer
+          </button>
+          <button class="btn btn-primary" id="inventory-submit-btn">
+            Valider l'État des Lieux
+          </button>
+        </footer>
+      </div>
     </div>
   </body>
 </html>
