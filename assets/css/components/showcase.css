@@ -1,0 +1,49 @@
+/* ====================================================== */
+/* COMPOSANT : SECTION VITRINE (SHOWCASE)                 */
+/* ====================================================== */
+
+.showcase-grid {
+  display: grid;
+  /* La magie du responsive : crée autant de colonnes que possible de 300px, 
+     puis les répartit équitablement. Sur mobile, il n'y aura qu'une seule colonne. */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem; /* Espace entre les éléments de la grille */
+}
+
+.showcase-item {
+  background-color: #ffffff; /* Fond blanc pour les cartes */
+  border-radius: 8px; /* Bords légèrement arrondis */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); /* Ombre discrète pour un effet de relief */
+  overflow: hidden; /* S'assure que l'image ne dépasse pas des bords arrondis */
+  transition: transform 0.3s, box-shadow 0.3s; /* Animation douce au survol */
+  text-align: center;
+}
+
+.showcase-item:hover {
+  transform: translateY(-5px); /* La carte se soulève légèrement */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12); /* L'ombre devient plus prononcée */
+}
+
+.showcase-item img {
+  width: 100%;
+  height: 200px; /* Hauteur fixe pour toutes les images de la vitrine */
+  object-fit: cover; /* L'image couvre la zone sans se déformer */
+}
+
+/* On ajoute du padding au contenu textuel de la carte */
+.showcase-item h3,
+.showcase-item p {
+  padding: 0 1.5rem;
+}
+
+.showcase-item h3 {
+  /* On met le titre après l'image */
+  margin-top: 1.5rem;
+  font-size: 1.25rem;
+  color: var(--color-primary);
+}
+
+.showcase-item p {
+  padding-bottom: 1.5rem;
+  font-size: 0.95rem;
+}

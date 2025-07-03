@@ -1,0 +1,37 @@
+/* Fichier : assets/css/components/login-modal.css */
+
+#login-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+#login-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--color-text-dark);
+}
+
+#login-form input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-family: var(--font-main);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+#login-form input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(0, 131, 143, 0.2);
+}
+
+.login-error {
+  color: #d32f2f; /* Rouge pour les erreurs */
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 1rem;
+  min-height: 1.2em; /* Réserve l'espace pour éviter le décalage */
+  display: none; /* Caché par défaut */
+}

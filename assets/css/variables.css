@@ -1,0 +1,33 @@
+/* ====================================================== */
+/* VARIABLES CSS GLOBALES                                 */
+/* ====================================================== */
+/* Ce fichier centralise toutes les variables de design
+   (couleurs, polices, etc.) pour une maintenance facile.
+*/
+
+:root {
+  /* Définition des polices de caractères.
+    [cite_start]Nous gardons la police "Poppins" pour son élégance et sa lisibilité. [cite: 10]
+  */
+  --font-main: "Poppins", sans-serif;
+
+  /* Palette de couleurs principale.
+    [cite_start]Basée sur un bleu-vert tropical et un jaune-orangé pour les accents. [cite: 9]
+  */
+  --color-primary: #00838f; /* Bleu-vert tropical */
+  --color-secondary: #ffb300; /* Jaune-orangé pour les accents et boutons */
+
+  /* Couleurs de base et de texte */
+  --color-background: #f4f4f4; /* Gris très clair pour le fond des sections */
+  --color-background-dark: #333333; /* Gris foncé pour le footer ou autres sections sombres */
+  --color-text-dark: #333333; /* Gris foncé pour le texte sur fond clair */
+  --color-text-light: #ffffff; /* Blanc pour le texte sur fond sombre */
+
+  /* Couleurs pour les overlays et effets */
+  --color-overlay: rgba(
+    0,
+    0,
+    0,
+    0.7
+  ); /* Noir semi-transparent pour les fonds de modales */
+}

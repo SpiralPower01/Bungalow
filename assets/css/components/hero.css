@@ -1,0 +1,91 @@
+/* ====================================================== */
+/* COMPOSANT : SECTION HÉROS                              */
+/* ====================================================== */
+
+#hero {
+  /* On définit la hauteur pour qu'elle prenne tout l'écran du visiteur */
+  height: 100vh;
+
+  /* On positionne notre image de fond */
+  background-image: url("../images/00.jpg"); /* CORRECTION : Chemin d'accès corrigé */
+  background-size: cover; /* L'image couvre toute la zone, sans se déformer */
+  background-position: center; /* L'image est toujours centrée */
+  background-attachment: fixed; /* Effet de parallaxe simple : l'image reste fixe au défilement */
+
+  /* On utilise Flexbox pour centrer parfaitement le contenu verticalement et horizontalement */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  /* On ajoute un léger voile sombre sur l'image pour améliorer la lisibilité du texte */
+  position: relative; /* Nécessaire pour positionner le pseudo-élément ::before */
+  z-index: 1;
+}
+
+#hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3); /* Voile noir avec 30% d'opacité */
+  z-index: -1; /* Se place entre la section #hero et son image de fond */
+}
+
+.hero-content {
+  color: var(
+    --color-text-light
+  ); /* Texte en blanc pour contraster avec le fond */
+}
+
+.hero-title {
+  font-size: 3rem; /* Grande taille de police pour le titre principal */
+  font-weight: 700;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); /* Ombre portée pour détacher le texte */
+}
+
+.hero-subtitle {
+  font-size: 1.5rem;
+  font-weight: 300;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* Style de la flèche d'invitation au défilement */
+.scroll-down-link {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--color-text-light);
+  font-size: 2rem;
+  animation: bounce 2s infinite; /* On ajoute une animation de rebond */
+}
+
+/* Keyframes pour l'animation de la flèche */
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translate(-50%, 0);
+  }
+  40% {
+    transform: translate(-50%, -15px);
+  }
+  60% {
+    transform: translate(-50%, -5px);
+  }
+}
+
+/* --- Media Queries pour les écrans plus larges --- */
+@media screen and (min-width: 768px) {
+  .hero-title {
+    font-size: 4.5rem; /* On grossit encore le titre sur tablette et ordinateur */
+  }
+  .hero-subtitle {
+    font-size: 2rem;
+  }
+}

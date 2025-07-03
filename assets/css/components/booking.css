@@ -1,0 +1,35 @@
+/* ====================================================== */
+/* COMPOSANT : SECTION RÉSERVATION (APPEL A L'ACTION)     */
+/* ====================================================== */
+
+#booking {
+  /* On utilise notre couleur primaire comme fond pour créer un contraste fort */
+  background-color: var(--color-primary);
+  color: var(--color-text-light); /* Le texte passe en blanc */
+  text-align: center;
+  /* On peut ajouter une forme subtile en haut de la section */
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+}
+
+#booking h2 {
+  /* Le titre est déjà en blanc grâce à la règle sur la section */
+  font-size: 2rem;
+}
+
+#booking p {
+  max-width: 600px; /* On limite la largeur du paragraphe pour la lisibilité */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#booking .button-primary {
+  margin-top: 1.5rem; /* Espace au-dessus du bouton */
+  transform: scale(
+    1.1
+  ); /* On rend le bouton légèrement plus gros pour attirer l'oeil */
+}
+
+#booking .button-primary:hover {
+  transform: scale(1.15) translateY(-3px); /* On ajuste l'effet de survol */
+}
