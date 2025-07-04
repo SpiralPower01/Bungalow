@@ -55,16 +55,31 @@ function hideLoginModal() {
  * @param {Event} event - L'événement de soumission.
  */
 async function handleFormSubmit(event) {
-  event.preventDefault(); // Empêche le rechargement de la page par défaut.
-  const success = login(dom.usernameInput.value, dom.passwordInput.value);
-  if (success) {
-    // Si la connexion réussit, on recharge la page pour que toute l'interface
-    // (bannière, calendrier, etc.) se mette à jour.
-    window.location.reload();
-  } else {
-    // Sinon, on affiche un message d'erreur.
-    dom.errorMsg.textContent = "Identifiant ou mot de passe incorrect.";
-    dom.errorMsg.style.display = "block";
+  event.preventDefault(); // Empêche le rechargement de la page.
+
+  // Appel de notre fonction de connexion mise à jour
+  const loginResult = login(dom.usernameInput.value, dom.passwordInput.value);
+
+  // On utilise un switch pour gérer les différents cas de figure
+  switch (loginResult) {
+    case "success":
+      // Cas 1 : Connexion réussie
+      // On recharge la page pour que toute l'interface se mette à jour.
+      window.location.reload();
+      break;
+
+    case "revoked":
+      // Cas 2 : Le compte est trouvé mais l'accès est révoqué
+      dom.errorMsg.textContent = "Votre accès à ce compte a été révoqué.";
+      dom.errorMsg.style.display = "block";
+      break;
+
+    case "failed":
+    default:
+      // Cas 3 : Les identifiants sont incorrects
+      dom.errorMsg.textContent = "Identifiant ou mot de passe incorrect.";
+      dom.errorMsg.style.display = "block";
+      break;
   }
 }
 

@@ -18,8 +18,13 @@ import {
   INFO_PUBLIC_HTML,
   INFO_PROTECTED_HTML,
 } from "./modules/content-data.js";
+import { modalContent } from "./config-content.js";
 import { initProfileController } from "./modules/profile-controller.js";
 import { handleNotifications } from "./modules/notifications.js";
+import { initInventoryController } from "./modules/inventory-controller.js";
+import { initUserLifecycle } from "./modules/user-lifecycle.js";
+import { initGuideController } from "./modules/guide-controller.js";
+import { initContactController } from "./modules/contact-controller.js";
 
 /**
  * Gère la bannière de bienvenue pour les utilisateurs connectés.
@@ -93,6 +98,7 @@ function initGlobalOverlayExit() {
  * Initialise les interactions du Hub de navigation.
  */
 function initHubInteractions() {
+  // --- Bouton "Infos & Fonctionnement" (logique existante) ---
   const infoButton = document.querySelector(
     'a.hub-button[href="#fonctionnement"]'
   );
@@ -106,6 +112,51 @@ function initHubInteractions() {
       }
     });
   }
+
+  // --- NOUVEAU : Bouton "Offres Partenaires" ---
+  const offersBtn = document.querySelector(
+    'a.hub-button[href="#offres-partenaires"]'
+  );
+  if (offersBtn) {
+    offersBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      // On affiche la modale avec le contenu des offres
+      showContentModal(
+        modalContent.partnerOffers.title,
+        modalContent.partnerOffers.content
+      );
+    });
+  }
+
+  // --- NOUVEAU : Bouton "Instructions d'Entrée" ---
+  const entryBtn = document.querySelector(
+    'a.hub-button[href="#instructions-entree"]'
+  );
+  if (entryBtn) {
+    entryBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      // On affiche la modale avec le titre et le contenu des instructions d'arrivée
+      showContentModal(
+        modalContent.entryInstructions.title,
+        modalContent.entryInstructions.content
+      );
+    });
+  }
+
+  // --- NOUVEAU : Bouton "Instructions de Départ" ---
+  const departureBtn = document.querySelector(
+    'a.hub-button[href="#instructions-sortie"]'
+  );
+  if (departureBtn) {
+    departureBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      // On affiche la modale avec le titre et le contenu des instructions de départ
+      showContentModal(
+        modalContent.departureInstructions.title,
+        modalContent.departureInstructions.content
+      );
+    });
+  }
 }
 
 // --- POINT D'ENTRÉE PRINCIPAL DE L'APPLICATION ---
@@ -115,6 +166,10 @@ document.addEventListener("DOMContentLoaded", () => {
   if (isLoggedIn()) {
     document.body.classList.add("user-is-logged-in");
     initWelcomeBanner(); // Affiche la bannière si connecté.
+
+    // On récupère les données pour les passer au module de notification
+    const userData = JSON.parse(localStorage.getItem("bungalowUserData")) || {}; // <= AJOUTEZ CETTE LIGNE
+    handleNotifications(userData); // <= AJOUTEZ CETTE LIGNE
   }
 
   // Gère l'animation d'entrée de la page.
@@ -129,6 +184,10 @@ document.addEventListener("DOMContentLoaded", () => {
   initContentModal();
   initHubInteractions();
   initProfileController();
+  initInventoryController();
+  initUserLifecycle();
+  initGuideController();
+  initContactController();
 
   const galleryTriggerBtn = document.querySelector("#open-focus-gallery-btn");
   if (galleryTriggerBtn) {
