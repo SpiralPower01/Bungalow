@@ -171,7 +171,7 @@ export const guideData = {
       ],
     },
     {
-      category: "Garages Fiables",
+      category: "Garages",
       items: [
         {
           name: "TOP GARAGE - ANSE AUTO",

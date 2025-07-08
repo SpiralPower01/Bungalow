@@ -33,7 +33,8 @@ function setupAccordionEvents(accordionContainer) {
       if (!wasOpen) {
         item.classList.add("is-open");
         const content = item.querySelector(":scope > .accordion-content");
-        content.style.maxHeight = content.scrollHeight + "px";
+        // MODIFICATION : Utilise scrollHeight pour s'adapter au contenu, plus une marge de sécurité
+        content.style.maxHeight = content.scrollHeight + 20 + "px";
       }
     });
   });
@@ -113,7 +114,7 @@ function renderAccordion() {
 
       <div class="accordion-item">
         <button class="accordion-header">
-          <span><i class="fas fa-concierge-bell"></i> Services Utiles</span>
+          <span><i class="fas fa-concierge-bell"></i> Services à Proximité</span>
           <i class="fas fa-chevron-down"></i>
         </button>
         <div class="accordion-content">

@@ -1,9 +1,12 @@
 // Fichier : assets/js/modules/contact-controller.js
 "use strict";
 
+const API_URL = "http://localhost:3000/api";
+
 import { isLoggedIn } from "./auth.js";
 
-const CHAT_STORAGE_KEY = "bungalowChatHistory";
+// NOUVEAU : On déclare une variable pour garder notre connexion socket.
+let socket = null;
 
 const dom = {
   modal: document.querySelector("#contact-chat-modal"),
@@ -11,7 +14,6 @@ const dom = {
   closeBtn: null,
   title: null,
   contactWrapper: null,
-  // Nouveaux éléments pour le tchat
   chatWrapper: null,
   chatHistory: null,
   chatForm: null,
@@ -19,104 +21,125 @@ const dom = {
   chatFileInput: null,
 };
 
-// --- LOGIQUE DU TCHAT ---
+// --- LOGIQUE DU TCHAT (MISE À JOUR) ---
 
-/**
- * Ajoute un message à l'interface graphique.
- * @param {{text: string, sender: 'user'|'host', timestamp: Date}} messageObject - L'objet du message.
- */
-function addMessageToUI(messageObject) {
+// --- MISE À JOUR DE CETTE FONCTION ---
+function addMessageToUI(msg) {
   if (!dom.chatHistory) return;
-  const messageEl = document.createElement("div");
-  messageEl.classList.add("chat-message", messageObject.sender);
-  messageEl.innerHTML = `<p>${messageObject.text}</p>`;
-  dom.chatHistory.appendChild(messageEl);
 
-  // Fait défiler automatiquement vers le bas
+  // On récupère l'ID de l'utilisateur actuel pour savoir s'il est l'expéditeur
+  const token = localStorage.getItem("authToken");
+  const payload = JSON.parse(atob(token.split(".")[1]));
+  const currentUserId = payload.userId;
+
+  const messageEl = document.createElement("div");
+  messageEl.classList.add("chat-message-bubble"); // On utilise le nouveau style
+
+  // On applique le style en fonction de l'expéditeur
+  if (msg.senderId === currentUserId) {
+    messageEl.classList.add("user-message"); // Message de l'utilisateur (bleu-vert)
+  } else {
+    messageEl.classList.add("host-message"); // Message de l'hôte (gris)
+  }
+
+  const p = document.createElement("p");
+  p.textContent = msg.content; // On lit "content" au lieu de "text"
+  messageEl.appendChild(p);
+
+  dom.chatHistory.appendChild(messageEl);
   dom.chatHistory.scrollTop = dom.chatHistory.scrollHeight;
 }
 
-/**
- * Charge l'historique depuis le localStorage et l'affiche.
- */
-function loadChatHistory() {
-  if (!dom.chatHistory) return;
-  dom.chatHistory.innerHTML = ""; // Vide l'historique actuel
-  const history = JSON.parse(localStorage.getItem(CHAT_STORAGE_KEY)) || [];
-  history.forEach(addMessageToUI);
+// NOUVELLE FONCTION à ajouter
+async function fetchAndDisplayHistory() {
+  const token = localStorage.getItem("authToken");
+  if (!token || !dom.chatHistory) return;
+
+  try {
+    const response = await fetch(`${API_URL}/messages/history`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!response.ok) throw new Error("Failed to fetch history");
+
+    const messages = await response.json();
+
+    // On vide l'historique pour ne pas afficher le message de bienvenue en double
+    dom.chatHistory.innerHTML = "";
+
+    messages.forEach((msg) => addMessageToUI(msg));
+  } catch (error) {
+    console.error("Error fetching history:", error);
+    // On ne met pas de message d'erreur pour ne pas effacer le "Bonjour" initial si le chargement échoue
+  }
 }
 
-/**
- * Gère la soumission d'un nouveau message.
- * @param {Event} event
- */
 function handleSendMessage(event) {
   event.preventDefault();
   const text = dom.chatInput.value.trim();
-  if (text === "") return;
+  if (text === "" || !socket) return;
+
+  // On récupère l'ID de l'utilisateur depuis son token.
+  // C'est une simulation, car le frontend ne peut pas lire le contenu du token.
+  // Dans une vraie app, on ferait un appel API pour récupérer le profil.
+  // Pour ce projet, on va tricher et le récupérer du localStorage.
+  const token = localStorage.getItem("authToken");
+  const payload = JSON.parse(atob(token.split(".")[1]));
+  const senderId = payload.userId;
 
   const message = {
     text: text,
-    sender: "user",
-    timestamp: new Date().toISOString(),
+    senderId: senderId, // On envoie l'ID de l'expéditeur
+    receiverId: "admin-user-id", // Le destinataire est toujours l'admin
   };
 
-  // Ajout et sauvegarde
-  addMessageToUI(message);
-  const history = JSON.parse(localStorage.getItem(CHAT_STORAGE_KEY)) || [];
-  history.push(message);
-  localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(history));
+  socket.emit("sendMessage", message);
 
   dom.chatInput.value = "";
-  dom.chatInput.style.height = "auto"; // Réinitialise la hauteur
-
-  // Simulation de la réponse de l'hôte
-  setTimeout(() => {
-    const response = {
-      text: "Merci pour votre message ! Nous avons bien reçu votre demande et nous vous répondrons dans les plus brefs délais.",
-      sender: "host",
-      timestamp: new Date().toISOString(),
-    };
-    addMessageToUI(response);
-    history.push(response);
-    localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(history));
-  }, 1500);
+  dom.chatInput.style.height = "auto";
 }
 
-/**
- * Gère la sélection d'un fichier.
- */
+// La gestion du fichier joint ne change pas pour l'instant
 function handleFileAttach() {
   const file = dom.chatFileInput.files[0];
-  if (!file) return;
+  if (!file || !socket) return;
 
-  // Simulation : on affiche juste le nom du fichier dans le tchat
   const message = {
-    text: `<i>Fichier joint : ${file.name}</i>`,
+    text: `Fichier joint : ${file.name}`,
     sender: "user",
     timestamp: new Date().toISOString(),
   };
 
-  addMessageToUI(message);
-  const history = JSON.parse(localStorage.getItem(CHAT_STORAGE_KEY)) || [];
-  history.push(message);
-  localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(history));
-
-  // Réinitialise l'input pour pouvoir sélectionner le même fichier à nouveau
+  socket.emit("sendMessage", message);
   dom.chatFileInput.value = "";
 }
 
-// --- GESTION DE LA MODALE ---
+// --- GESTION DE LA MODALE (MISE À JOUR) ---
 
 function showModal() {
   if (!dom.modal) return;
 
-  // Logique d'affichage conditionnel
   if (isLoggedIn()) {
     dom.title.textContent = "Tchat avec votre hôte";
     dom.contactWrapper.style.display = "none";
     dom.chatWrapper.style.display = "block";
-    loadChatHistory(); // On charge l'historique du tchat
+
+    fetchAndDisplayHistory();
+    // NOUVEAU : On établit la connexion Socket.IO
+    if (!socket) {
+      // NOUVEAU : On envoie le token pour authentifier la connexion
+      socket = io("http://localhost:3000", {
+        auth: {
+          token: localStorage.getItem("authToken"),
+        },
+      });
+
+      // On écoute les messages entrants du serveur
+      socket.on("receiveMessage", (messageData) => {
+        // On ajoute le message reçu à notre interface
+        addMessageToUI(messageData);
+      });
+    }
   } else {
     dom.title.textContent = "Nous Contacter";
     dom.contactWrapper.style.display = "block";
@@ -129,10 +152,18 @@ function showModal() {
 function hideModal() {
   if (dom.modal) {
     dom.modal.classList.remove("is-visible");
+
+    // NOUVEAU : On se déconnecte du socket quand on ferme la modale
+    if (socket) {
+      socket.disconnect();
+      socket = null;
+    }
   }
 }
 
+// La gestion du formulaire de contact classique ne change pas
 function handleLegacyFormSubmit(event) {
+  // ... (code de la fonction inchangé)
   event.preventDefault();
   const form = event.target;
   const statusP = document.getElementById("contact-form-status-modal");
@@ -166,7 +197,6 @@ function handleLegacyFormSubmit(event) {
 export function initContactController() {
   if (!dom.modal || !dom.openBtn) return;
 
-  // Sélection des éléments DOM
   dom.closeBtn = dom.modal.querySelector(".modal-close-btn");
   dom.title = dom.modal.querySelector("#contact-chat-modal-title");
   dom.contactWrapper = dom.modal.querySelector("#contact-form-wrapper");
@@ -189,7 +219,6 @@ export function initContactController() {
     return;
   }
 
-  // Écouteurs d'événements
   dom.openBtn.addEventListener("click", (e) => {
     e.preventDefault();
     showModal();
@@ -201,16 +230,13 @@ export function initContactController() {
   });
 
   legacyContactForm.addEventListener("submit", handleLegacyFormSubmit);
-
-  // Nouveaux écouteurs pour le tchat
   dom.chatForm.addEventListener("submit", handleSendMessage);
   dom.chatFileInput.addEventListener("change", handleFileAttach);
 
-  // Ajustement auto de la hauteur du textarea
   dom.chatInput.addEventListener("input", () => {
     dom.chatInput.style.height = "auto";
     dom.chatInput.style.height = dom.chatInput.scrollHeight + "px";
   });
 
-  console.log("Module Contact/Chat Controller initialisé.");
+  console.log("Module Contact/Chat Controller (temps réel) initialisé.");
 }

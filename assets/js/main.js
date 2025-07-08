@@ -1,8 +1,31 @@
 "use strict";
 
 // Imports des modules nécessaires pour la page d'accueil
+import { isLoggedIn } from "./modules/auth.js";
 import { initScrollAnimations } from "./modules/animations.js";
 // CORRECTION : L'import du module d'équipement est supprimé car il n'est plus utilisé ici.
+
+// --- NOUVEAU : BLOC DE REDIRECTION AUTOMATIQUE ---
+(function autoRedirectClient() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const paymentStatus = urlParams.get("payment_status");
+
+  // Étape 1 : Si l'utilisateur vient de payer avec succès, on le marque comme client.
+  if (paymentStatus === "success") {
+    localStorage.setItem("isClient", "true");
+    // On nettoie l'URL et on redirige immédiatement vers l'expérience.
+    window.history.replaceState(null, "", window.location.pathname); // Supprime les paramètres de l'URL
+    window.location.replace("experience.html");
+    return; // Stoppe le script ici
+  }
+
+  // Étape 2 : Si l'utilisateur est un client connu (drapeau permanent ou session active), on le redirige.
+  const isAClient = localStorage.getItem("isClient") === "true";
+  if (isAClient || isLoggedIn()) {
+    window.location.replace("experience.html");
+  }
+})();
+// --- FIN DU BLOC DE REDIRECTION ---
 
 /**
  * Gère la transition de sortie lors du clic sur un lien.

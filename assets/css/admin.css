@@ -1,0 +1,130 @@
+/* Fichier: assets/css/admin.css */
+
+/* --- Styles de base --- */
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  margin: 0;
+  background-color: #f4f7f6;
+  color: #333;
+  /* Empêche le rebond du scroll sur mobile */
+  overscroll-behavior: none;
+}
+
+/* --- Layout Mobile-First (par défaut) --- */
+.admin-panel {
+  display: flex;
+  flex-direction: column; /* Les éléments se superposent verticalement */
+  height: 100vh;
+}
+
+.sidebar {
+  width: 100%; /* Prend toute la largeur sur mobile */
+  flex-shrink: 0;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 1rem;
+  box-sizing: border-box;
+  /* Limite la hauteur et permet de scroller si la liste est longue */
+  max-height: 40vh;
+  overflow-y: auto;
+}
+
+.sidebar h1 {
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+  color: #00838f;
+}
+
+.chat-window {
+  flex-grow: 1; /* Prend le reste de la hauteur disponible */
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  overflow-y: auto; /* Permet de scroller le contenu du tchat */
+}
+
+/* --- Styles de la conversation (communs) --- */
+.conversation-item {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.conversation-item:hover {
+  background-color: #f0f0f0;
+}
+
+.conversation-item.active {
+  background-color: #e0f7fa;
+  font-weight: bold;
+}
+
+#message-history {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.chat-message-bubble {
+  padding: 0.75rem 1rem;
+  border-radius: 18px;
+  max-width: 70%;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.user-message {
+  background-color: #00838f;
+  color: white;
+  border-bottom-left-radius: 4px;
+  align-self: flex-start;
+}
+
+.admin-message {
+  background-color: #e0e0e0;
+  color: #333;
+  border-bottom-right-radius: 4px;
+  align-self: flex-end;
+}
+
+#reply-form {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+#reply-form input {
+  flex-grow: 1;
+  border: 1px solid #ccc;
+  padding: 0.75rem;
+  border-radius: 20px;
+}
+
+#reply-form button {
+  padding: 0.75rem 1rem;
+  border: none;
+  background-color: #00838f;
+  color: white;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+/* --- Amélioration pour les écrans plus larges (Desktop) --- */
+@media (min-width: 768px) {
+  .admin-panel {
+    flex-direction: row; /* Les éléments se mettent côte à côte */
+  }
+
+  .sidebar {
+    width: 300px; /* La sidebar prend une largeur fixe */
+    max-height: 100vh;
+    border-right: 1px solid #e0e0e0;
+    border-bottom: none;
+  }
+}

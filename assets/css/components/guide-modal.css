@@ -37,17 +37,20 @@
   background-color: #e0e0e0;
 }
 
-#guide-modal-content .accordion-header i {
+/* MODIFICATION : Règle par défaut pour TOUTES les flèches d'accordéon */
+#guide-modal-content .accordion-header i.fa-chevron-down {
   color: var(--color-primary);
   transition: transform 0.4s ease;
   margin-right: 1rem; /* Espace entre l'icône et le texte */
+  transform: rotate(0deg); /* Force la flèche vers le bas par défaut */
 }
 
+/* MODIFICATION : Règle pour l'état ouvert, plus spécifique */
 #guide-modal-content
   .accordion-item.is-open
-  .accordion-header
-  i.fa-chevron-down {
-  transform: rotate(180deg);
+  > .accordion-header
+  > i.fa-chevron-down {
+  transform: rotate(180deg); /* Pointe vers le haut quand ouvert */
 }
 
 #guide-modal-content .accordion-content {
@@ -112,7 +115,7 @@
   padding: 0.5rem 0;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.5rem; /* Réduit le gap pour les éléments imbriqués */
 }
 
 .accordion--nested .accordion-item {
@@ -124,6 +127,7 @@
   background-color: #f8f8f8;
   font-size: 1rem;
   font-weight: 500;
+  padding: 0.75rem 1rem; /* Ajuste le padding pour les sous-accordéons */
 }
 
 .accordion--nested .accordion-content {
