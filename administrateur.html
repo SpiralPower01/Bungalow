@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel Admin - Mon Bungalow</title>
+    <link rel="stylesheet" href="assets/css/admin.css" />
+  </head>
+  <body>
+    <script>
+      const token = localStorage.getItem("adminAuthToken");
+      if (!token) {
+        // Si pas de token, on redirige immédiatement vers la page de connexion
+        window.location.replace("admin-login.html");
+      }
+    </script>
+    <div class="admin-panel">
+      <aside class="sidebar">
+        <h1>Conversations</h1>
+        <div id="conversation-list"></div>
+      </aside>
+
+      <main class="chat-window">
+        <p>Sélectionnez une conversation pour afficher les messages.</p>
+      </main>
+    </div>
+
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+
+    <script src="assets/js/admin.js" type="module"></script>
+  </body>
+</html>

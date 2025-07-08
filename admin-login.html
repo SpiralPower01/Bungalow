@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Connexion Admin</title>
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+      .login-container {
+        width: 100%;
+        max-width: 400px;
+        padding: 2rem;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      }
+      .login-container h1 {
+        text-align: center;
+        margin-bottom: 1.5rem;
+      }
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+      }
+      .form-group input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      .error-message {
+        color: #d32f2f;
+        text-align: center;
+        min-height: 1em;
+        margin-bottom: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+      <h1>Accès Admin</h1>
+      <form id="admin-login-form">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" required value="admin@bungalow.com" />
+        </div>
+        <div class="form-group">
+          <label for="password">Mot de passe</label>
+          <input type="password" id="password" required />
+        </div>
+        <p id="error-message" class="error-message"></p>
+        <button type="submit" class="button-primary" style="width: 100%">
+          Se connecter
+        </button>
+      </form>
+    </div>
+
+    <script src="assets/js/admin-login.js"></script>
+  </body>
+</html>
